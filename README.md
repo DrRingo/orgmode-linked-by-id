@@ -4,48 +4,48 @@
 [![Emacs](https://img.shields.io/badge/Emacs-26.1+-blue.svg)](https://www.gnu.org/software/emacs/)
 [![Org-mode](https://img.shields.io/badge/Org--mode-9.0+-green.svg)](https://orgmode.org/)
 
-Extension cho Emacs Org-mode để tạo liên kết chéo giữa các header bằng cách sử dụng ID thay vì nội dung header.
+Extension for Emacs Org-mode to create cross-links between headers using IDs instead of header content.
 
-## 🌟 Tính năng
+## 🌟 Features
 
-### 1. Liên kết Header trong File hiện tại
-- Tìm tất cả headers có ID trong file đang mở
-- Cho phép chọn header từ danh sách
-- Chèn liên kết ID vào vị trí con trỏ
+### 1. Link Headers in Current File
+- Find all headers with IDs in the currently open file
+- Allow selection of headers from a list
+- Insert ID links at cursor position
 
-### 2. Liên kết Header trong Thư mục
-- Tìm headers có ID trong tất cả file .org trong thư mục (không bao gồm thư mục con)
-- Sử dụng Ivy với fuzzy search để tìm kiếm dễ dàng
-- Chọn thư mục tương tác
+### 2. Link Headers in Directory
+- Find headers with IDs in all .org files in a directory (excluding subdirectories)
+- Use Ivy with fuzzy search for easy discovery
+- Interactive directory selection
 
-### 3. Liên kết đến Hình ảnh/Bảng có tên
-- Tìm các đối tượng có `#+NAME` và `#+CAPTION`
-- Hiển thị danh sách caption cho người dùng chọn
-- Cho phép tùy chỉnh description của link
+### 3. Link to Named Images/Tables
+- Find objects with `#+NAME` and `#+CAPTION`
+- Display caption list for user selection
+- Allow customization of link description
 
-## 🚀 Cài đặt
+## 🚀 Installation
 
-### Yêu cầu hệ thống
+### System Requirements
 
-- Emacs 26.1 trở lên
+- Emacs 26.1 or higher
 - Org-mode
-- Ivy (cho fuzzy search)
-- Helm (cho tìm kiếm đối tượng)
+- Ivy (for fuzzy search)
+- Helm (for object search)
 
-### Cách cài đặt
+### Installation Methods
 
-#### Phương pháp 1: Clone repository
+#### Method 1: Clone repository
 
 ```bash
 git clone https://github.com/drringo/orgmode-linked-by-id.git
 ```
 
-Thêm vào file config của bạn (`.emacs`, `init.el`, hoặc `config.el`):
+Add to your config file (`.emacs`, `init.el`, or `config.el`):
 ```elisp
 (load "~/path/to/orgmode-linked-by-id/orgmode-linked-by-id.lisp")
 ```
 
-#### Phương pháp 2: Sử dụng use-package
+#### Method 2: Using use-package
 
 ```elisp
 (use-package orgmode-linked-by-id
@@ -54,34 +54,28 @@ Thêm vào file config của bạn (`.emacs`, `init.el`, hoặc `config.el`):
   (require 'orgmode-linked-by-id))
 ```
 
-#### Phương pháp 3: Từ GitHub Gist
+## ⌨️ Keybindings
 
-1. Truy cập: https://gist.github.com/drringo/your-gist-id
-2. Copy nội dung file `orgmode-linked-by-id.lisp`
-3. Paste vào file config của bạn
+| Keybinding | Function | Description |
+|------------|----------|-------------|
+| `C-c l i` or `SPC l i` | Insert ID link in current file | Find headers in current file |
+| `C-c l f` or `SPC l f` | Insert ID link in directory | Find headers in directory |
+| `C-c l c` or `SPC l c` | Insert link to named image/table | Find objects with NAME/CAPTION |
 
-## ⌨️ Phím tắt
+## 📖 Usage Guide
 
-| Phím tắt | Chức năng | Mô tả |
-|----------|-----------|-------|
-| `C-c l i` hoặc `SPC l i` | Chèn ID link trong file hiện tại | Tìm headers trong file đang mở |
-| `C-c l f` hoặc `SPC l f` | Chèn ID link trong thư mục | Tìm headers trong thư mục |
-| `C-c l c` hoặc `SPC l c` | Chèn link đến hình ảnh/bảng có tên | Tìm đối tượng có NAME/CAPTION |
+### Basic Workflow
 
-## 📖 Hướng dẫn sử dụng
+1. **Create ID for header**: `SPC m I`
+2. **Create link to another header**:
+   - `C-c l i`: Search in current file
+   - `C-c l f`: Search in directory
+   - `C-c l c`: Find named images/tables
+3. Select header from list
+4. Customize description if needed
+5. Link is inserted at cursor position
 
-### Quy trình làm việc cơ bản
-
-1. **Tạo ID cho header**: `SPC m I`
-2. **Tạo liên kết đến header khác**:
-   - `C-c l i`: Tìm trong file hiện tại
-   - `C-c l f`: Tìm trong thư mục
-   - `C-c l c`: Tìm hình ảnh/bảng có tên
-3. Chọn header từ danh sách
-4. Tùy chỉnh description nếu cần
-5. Link được chèn vào vị trí con trỏ
-
-### Ví dụ sử dụng
+### Usage Example
 
 ```org
 * Header 1
@@ -94,53 +88,53 @@ Thêm vào file config của bạn (`.emacs`, `init.el`, hoặc `config.el`):
 :ID: def456
 :END:
 
-Nội dung tham chiếu đến [[id:abc123][Header 1]] và [[id:def456][Header 2]].
+Content referencing [[id:abc123][Header 1]] and [[id:def456][Header 2]].
 
 #+NAME: my-image
-#+CAPTION: Hình ảnh mẫu
+#+CAPTION: Sample image
 [[file:image.png]]
 
-Liên kết đến [[my-image][Hình ảnh mẫu]].
+Link to [[my-image][Sample image]].
 ```
 
-## 🎯 Lý do sử dụng ID
+## 🎯 Why Use IDs
 
-- **Tránh vấn đề khi header thay đổi nội dung**
-- **Không cần suy nghĩ về CUSTOM_ID**
-- **ID được tạo tự động bằng `org-id-get-create`**
+- **Avoid issues when header content changes**
+- **No need to think about CUSTOM_ID**
+- **IDs are automatically generated using `org-id-get-create`**
 
-## 📊 So sánh với phương pháp truyền thống
+## 📊 Comparison with Traditional Method
 
-| Phương pháp truyền thống | Extension này |
-|--------------------------|---------------|
+| Traditional Method | This Extension |
+|-------------------|----------------|
 | `[[*Header name][Header name]]` | `[[id:abc123][Header name]]` |
-| Hỏng khi header thay đổi | Vẫn hoạt động |
-| Khó tìm kiếm | Tìm kiếm dễ dàng |
+| Breaks when header changes | Still works |
+| Difficult to search | Easy to search |
 
-## 🤝 Đóng góp
+## 🤝 Contributing
 
-Mọi đóng góp đều được chào đón! Vui lòng:
+All contributions are welcome! Please:
 
-1. Fork repository
-2. Tạo branch mới (`git checkout -b feature/amazing-feature`)
-3. Commit thay đổi (`git commit -m 'Add amazing feature'`)
-4. Push lên branch (`git push origin feature/amazing-feature`)
-5. Tạo Pull Request
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
 ## 📝 License
 
-Dự án này được phân phối dưới giấy phép MIT. Xem file [LICENSE](LICENSE) để biết thêm chi tiết.
+This project is distributed under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
-## 🔗 Liên kết
+## 🔗 Links
 
 - **Repository**: https://github.com/drringo/orgmode-linked-by-id
 - **Issues**: https://github.com/drringo/orgmode-linked-by-id/issues
 - **Discussions**: https://github.com/drringo/orgmode-linked-by-id/discussions
 
-## 📚 Tài liệu thêm
+## 📚 Additional Documentation
 
-Xem file [intro.md](intro.md) để đọc bài blog chi tiết về dự án này.
+See the [intro.md](intro.md) file to read a detailed blog post about this project.
 
 ---
 
-⭐ Nếu dự án này hữu ích, hãy cho một star! 
+⭐ If this project is useful, please give it a star! 
