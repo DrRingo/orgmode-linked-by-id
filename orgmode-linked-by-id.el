@@ -1,3 +1,46 @@
+;;; orgmode-linked-by-id.el --- Extension for Emacs Org-mode to create cross-links between headers using IDs -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2024 drringo
+
+;; Author: drringo
+;; Maintainer: drringo
+;; URL: https://github.com/drringo/orgmode-linked-by-id
+;; Version: 1.0.0
+;; Package-Requires: ((emacs "26.1") (helm "3.0"))
+;; Keywords: org, links, helm, fuzzy-search
+
+;; This file is part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Extension for Emacs Org-mode to create cross-links between headers
+;; using IDs instead of header content.
+;;
+;; This extension provides three main features:
+;; 1. Link headers in current file
+;; 2. Link headers in directory
+;; 3. Link to named images/tables
+;;
+;; Keybindings:
+;; - C-c l i or SPC l i: Insert ID link in current file
+;; - C-c l f or SPC l f: Insert ID link in directory
+;; - C-c l c or SPC l c: Insert link to named image/table
+
+;;; Code:
+
 ;; ==============================================================
 ;; LIÊN KẾT BẰNG ID TRONG ORG-MODE
 ;; ==============================================================
@@ -19,6 +62,10 @@
 ;; 4. Tùy chỉnh description nếu cần
 ;; 5. Link được chèn vào vị trí con trỏ
 
+;; Load Helm package
+(require 'helm)
+(helm-mode 1)
+
 ;; ==============================================================
 ;; PHẦN 1: LIÊN KẾT HEADER TRONG FILE HIỆN TẠI
 ;; ==============================================================
@@ -31,13 +78,15 @@
                      (let ((id (org-entry-get (point) "ID")))
                        (when id
                          (list (org-get-heading t t t t) id)))))))
-         (selection (completing-read "Select header: "
-                                     (mapcar 'car org-ids))))
-    (when selection
-      (let* ((id (cadr (assoc selection org-ids)))
-             (description selection)
-             (link (format "[[id:%s][%s]]" id description)))
-        (insert link)))))
+    (if (null org-ids)
+        (message "No headers with IDs found in current file")
+      (let* ((selection (helm-comp-read "Select header: "
+                                        (mapcar 'car org-ids))))
+        (when selection
+          (let* ((id (cadr (assoc selection org-ids)))
+                 (description selection)
+                 (link (format "[[id:%s][%s]]" id description)))
+            (insert link))))))))
 
 ;; Thiết lập phím tắt
 (global-set-key (kbd "C-c l i") 'my/org-get-headers-with-ids)
@@ -49,10 +98,6 @@
 
 ;; Load các package cần thiết
 (require 'org-id)
-(require 'ivy)
-
-;; Bật fuzzy matching trong Ivy để tìm kiếm dễ dàng hơn
-(setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 
 (defun my/org-get-headers-with-ids-in-folder (directory)
   "Search all org headers with IDs in DIRECTORY (no subfolders) and insert an Org-mode link with fuzzy search."
@@ -61,8 +106,8 @@
          (org-ids (my/org-collect-ids-from-files org-files)))
     (if (null org-ids)
         (message "No headers with IDs found in directory: %s" directory)
-      (let* ((selection (ivy-completing-read "Select header: "
-                                             (mapcar 'car org-ids))))
+      (let* ((selection (helm-comp-read "Select header: "
+                                        (mapcar 'car org-ids))))
         (when selection
           (let* ((id (cadr (assoc selection org-ids)))
                  (description selection)
@@ -91,8 +136,6 @@
 (global-set-key (kbd "C-c l f") 'my/org-get-headers-with-ids-in-folder)
 (map! :leader (:prefix "l" :desc "Insert ID in folder" "f" #'my/org-get-headers-with-ids-in-folder))
 
-
-
 ;; ==============================================================
 ;; PHẦN 3: LIÊN KẾT ĐẾN HÌNH ẢNH/BẢNG CÓ TÊN
 ;; ==============================================================
@@ -104,10 +147,6 @@
 ;; 2. Hiển thị danh sách caption cho người dùng chọn
 ;; 3. Chọn và tạo link đến #+NAME đó
 ;; 4. Tùy chỉnh description của link (mặc định là CAPTION)
-
-;; Load Helm package
-(require 'helm)
-(helm-mode 1)
 
 (defun get-org-image-names-and-captions ()
   "Lấy tất cả các #+NAME và #+CAPTION của hình ảnh/bảng trong tài liệu Org mode.
@@ -164,3 +203,7 @@
 ;; ==============================================================
 ;; KẾT THÚC LIÊN KẾT BẰNG ID
 ;; ==============================================================
+
+(provide 'orgmode-linked-by-id)
+
+;;; orgmode-linked-by-id.el ends here

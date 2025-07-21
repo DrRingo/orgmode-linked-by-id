@@ -1,0 +1,56 @@
+#+TITLE: Demo - Org-mode Linking by ID
+#+AUTHOR: drringo
+#+DATE: 2024
+
+* Giới thiệu
+:PROPERTIES:
+:ID: intro-demo
+:END:
+
+Đây là file demo để test extension Org-mode Linking by ID.
+
+* Tính năng 1: Liên kết trong file hiện tại
+:PROPERTIES:
+:ID: feature-1
+:END:
+
+Sử dụng phím tắt `C-c l i` để tạo liên kết đến các header khác trong file này.
+
+* Tính năng 2: Liên kết trong thư mục
+:PROPERTIES:
+:ID: feature-2
+:END:
+
+Sử dụng phím tắt `C-c l f` để tìm và liên kết đến headers trong các file .org khác.
+
+* Tính năng 3: Liên kết hình ảnh/bảng
+:PROPERTIES:
+:ID: feature-3
+:END:
+
+#+NAME: demo-image
+#+CAPTION: Hình ảnh demo
+[[file:demo.png]]
+
+Sử dụng phím tắt `C-c l c` để tạo liên kết đến hình ảnh có tên.
+
+* Ví dụ sử dụng
+:PROPERTIES:
+:ID: usage-example
+:END:
+
+Đây là ví dụ về cách tạo liên kết:
+
+1. Tạo ID cho header: `SPC m I`
+2. Tạo liên kết: `C-c l i` hoặc `C-c l f`
+3. Chọn header từ danh sách
+4. Liên kết được chèn vào vị trí con trỏ
+
+* Kết luận
+:PROPERTIES:
+:ID: conclusion
+:END:
+
+Extension này giúp tạo liên kết chéo một cách dễ dàng và ổn định trong Org-mode.
+
+**Lưu ý**: Để test đầy đủ, hãy tạo thêm một số file .org khác trong cùng thư mục với các header có ID. 

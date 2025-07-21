@@ -15,7 +15,7 @@ Extension for Emacs Org-mode to create cross-links between headers using IDs ins
 
 ### 2. Link Headers in Directory
 - Find headers with IDs in all .org files in a directory (excluding subdirectories)
-- Use Ivy with fuzzy search for easy discovery
+- Use Helm with fuzzy search for easy discovery
 - Interactive directory selection
 
 ### 3. Link to Named Images/Tables
@@ -25,33 +25,44 @@ Extension for Emacs Org-mode to create cross-links between headers using IDs ins
 
 ## 🚀 Installation
 
+> **Quick Install**: See [INSTALL.md](INSTALL.md) for the fastest installation method.
+
 ### System Requirements
 
 - Emacs 26.1 or higher
 - Org-mode
-- Ivy (for fuzzy search)
-- Helm (for object search)
+- Helm (for fuzzy search and object search)
 
 ### Installation Methods
 
-#### Method 1: Clone repository
-
-```bash
-git clone https://github.com/drringo/orgmode-linked-by-id.git
-```
+#### Method 1: Using use-package (Recommended)
 
 Add to your config file (`.emacs`, `init.el`, or `config.el`):
-```elisp
-(load "~/path/to/orgmode-linked-by-id/orgmode-linked-by-id.lisp")
-```
-
-#### Method 2: Using use-package
 
 ```elisp
 (use-package orgmode-linked-by-id
-  :load-path "~/path/to/orgmode-linked-by-id"
+  :straight (:type git :host github :repo "drringo/orgmode-linked-by-id")
   :config
   (require 'orgmode-linked-by-id))
+```
+
+#### Method 2: Using straight.el
+
+```elisp
+(straight-use-package
+ '(orgmode-linked-by-id :type git :host github :repo "drringo/orgmode-linked-by-id"))
+```
+
+#### Method 3: Manual installation
+
+```bash
+git clone https://github.com/drringo/orgmode-linked-by-id.git ~/.emacs.d/orgmode-linked-by-id
+```
+
+Add to your config file:
+```elisp
+(add-to-list 'load-path "~/.emacs.d/orgmode-linked-by-id")
+(require 'orgmode-linked-by-id)
 ```
 
 ## ⌨️ Keybindings

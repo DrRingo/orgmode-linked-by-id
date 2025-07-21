@@ -15,7 +15,7 @@ Extension cho Emacs Org-mode để tạo liên kết chéo giữa các header b�
 
 ### 2. Liên kết Header trong Thư mục
 - Tìm headers có ID trong tất cả file .org trong thư mục (không bao gồm thư mục con)
-- Sử dụng Ivy với fuzzy search để tìm kiếm dễ dàng
+- Sử dụng Helm với fuzzy search để tìm kiếm dễ dàng
 - Chọn thư mục tương tác
 
 ### 3. Liên kết đến Hình ảnh/Bảng có tên
@@ -25,33 +25,44 @@ Extension cho Emacs Org-mode để tạo liên kết chéo giữa các header b�
 
 ## 🚀 Cài đặt
 
+> **Cài đặt nhanh**: Xem [INSTALL.md](INSTALL.md) để cài đặt nhanh nhất.
+
 ### Yêu cầu hệ thống
 
 - Emacs 26.1 trở lên
 - Org-mode
-- Ivy (cho fuzzy search)
-- Helm (cho tìm kiếm đối tượng)
+- Helm (cho fuzzy search và tìm kiếm đối tượng)
 
 ### Cách cài đặt
 
-#### Phương pháp 1: Clone repository
-
-```bash
-git clone https://github.com/drringo/orgmode-linked-by-id.git
-```
+#### Phương pháp 1: Sử dụng use-package (Khuyến nghị)
 
 Thêm vào file config của bạn (`.emacs`, `init.el`, hoặc `config.el`):
-```elisp
-(load "~/path/to/orgmode-linked-by-id/orgmode-linked-by-id.lisp")
-```
-
-#### Phương pháp 2: Sử dụng use-package
 
 ```elisp
 (use-package orgmode-linked-by-id
-  :load-path "~/path/to/orgmode-linked-by-id"
+  :straight (:type git :host github :repo "drringo/orgmode-linked-by-id")
   :config
   (require 'orgmode-linked-by-id))
+```
+
+#### Phương pháp 2: Sử dụng straight.el
+
+```elisp
+(straight-use-package
+ '(orgmode-linked-by-id :type git :host github :repo "drringo/orgmode-linked-by-id"))
+```
+
+#### Phương pháp 3: Cài đặt thủ công
+
+```bash
+git clone https://github.com/drringo/orgmode-linked-by-id.git ~/.emacs.d/orgmode-linked-by-id
+```
+
+Thêm vào file config:
+```elisp
+(add-to-list 'load-path "~/.emacs.d/orgmode-linked-by-id")
+(require 'orgmode-linked-by-id)
 ```
 
 ## ⌨️ Phím tắt

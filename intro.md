@@ -34,8 +34,7 @@ Extension được chia thành 3 module chính:
 
 - Emacs 26.1 trở lên
 - Org-mode
-- Ivy (cho fuzzy search)
-- Helm (cho tìm kiếm đối tượng)
+- Helm (cho fuzzy search và tìm kiếm đối tượng)
 
 ### Cách cài đặt
 
@@ -105,7 +104,7 @@ Nội dung tham chiếu đến [[id:abc123][Header 1]].
 
 **Chức năng**:
 - Tìm headers có ID trong tất cả file .org trong thư mục
-- Sử dụng Ivy với fuzzy search để tìm kiếm dễ dàng
+- Sử dụng Helm với fuzzy search để tìm kiếm dễ dàng
 - Không bao gồm thư mục con (để tránh tìm kiếm quá rộng)
 
 **Ưu điểm**:
