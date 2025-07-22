@@ -180,8 +180,7 @@
                     (or current-caption current-name)) result)))
     (reverse result)))
 
-;; Sửa lại hàm helm-insert-org-image-link-with-custom-caption để gọi hàm mới
-(defun helm-insert-org-image-link-with-custom-caption ()
+(defun drringo/helm-insert-org-image-link-with-custom-caption ()
   "Hiển thị danh sách hình ảnh/bảng qua caption hoặc name, 
    cho phép chỉnh sửa caption trước khi chèn liên kết."
   (interactive)
@@ -199,7 +198,7 @@
           (insert (format "[[%s][%s]]" selected-name new-caption)))))))
 
 ;; Thiết lập phím tắt
-(global-set-key (kbd "C-c l c") 'helm-insert-org-image-link-with-custom-caption)
+(global-set-key (kbd "C-c l c") 'drringo/helm-insert-org-image-link-with-custom-caption)
 
 ;; ==============================================================
 ;; KẾT THÚC LIÊN KẾT BẰNG ID
