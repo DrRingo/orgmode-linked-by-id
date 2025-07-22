@@ -1,5 +1,14 @@
 # Orgmode-linked-by-id
 
+**Orgmode-linked-by-id** là một extension cho Emacs Org-mode giúp bạn tạo liên kết chéo bền vững giữa các tiêu đề, hình ảnh, bảng bằng ID thay vì tên tiêu đề. Điều này giải quyết triệt để vấn đề link bị hỏng khi đổi tên header, đồng thời giúp bạn dễ dàng tham chiếu đến bất kỳ mục nào trong ghi chú, kể cả khi tài liệu lớn hoặc nhiều file.
+
+### Tại sao bạn cần extension này?
+- Khi đổi tên tiêu đề, các liên kết Org truyền thống sẽ bị hỏng. Liên kết theo ID luôn hoạt động.
+- Bạn muốn liên kết nhanh đến bất kỳ mục, hình ảnh, bảng nào—trong file hoặc cả thư mục—mà không phải nhớ/cài đặt ID thủ công hay lo lắng về tên tiêu đề dễ đổi.
+- Bạn cần một cách tìm kiếm, chèn liên kết nhanh, tiện lợi, đặc biệt khi hệ thống ghi chú Org của bạn ngày càng lớn.
+
+Extension này lý tưởng cho nhà nghiên cứu, sinh viên, người làm tri thức, hoặc bất kỳ ai xây dựng hệ thống ghi chú Org-mode lớn, liên kết chéo nhiều nơi (như Zettelkasten).
+
 ## Hướng dẫn cài đặt
 
 ### Cho Doom Emacs (khuyên dùng)

@@ -1,4 +1,15 @@
+[🇻🇳 Xem hướng dẫn tiếng Việt tại đây (README.vi.md)](README.vi.md)
+
 # Orgmode-linked-by-id
+
+**Orgmode-linked-by-id** is an Emacs extension for Org-mode that helps you create robust, future-proof cross-links between headers, images, and tables using unique IDs instead of header text. This solves the common problem of broken links when headers are renamed, and makes it easy to reference any section or object in your notes, even as your documents evolve.
+
+### Why do you need this?
+- When you change a header's text, traditional Org links break. With ID-based links, your references always work.
+- You want to quickly link to any section, image, or table—across files or within a directory—without worrying about manual IDs or fragile header names.
+- You need a fast, interactive way to search and insert links, especially in large or growing Org repositories.
+
+This package is ideal for researchers, students, knowledge workers, and anyone who maintains large, interconnected Org-mode notes or Zettelkasten systems.
 
 ## Installation
 
