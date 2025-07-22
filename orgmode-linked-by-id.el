@@ -70,27 +70,30 @@
 ;; PHẦN 1: LIÊN KẾT HEADER TRONG FILE HIỆN TẠI
 ;; ==============================================================
 
-(defun my/org-get-headers-with-ids ()
+(require 'org) ; Đảm bảo load org trước khi dùng các hàm org-*
+
+(defun drringo/org-get-headers-with-ids ()
   "Tìm tất cả headers có ID trong file hiện tại và chèn liên kết Org-mode."
   (interactive)
-  (let* ((org-ids (delq nil (org-map-entries
-                   (lambda ()
-                     (let ((id (org-entry-get (point) "ID")))
-                       (when id
-                         (list (org-get-heading t t t t) id)))))))
+  (let* ((org-ids
+          (delq nil
+                 (org-map-entries
+                  (lambda ()
+                    (let ((id (org-entry-get (point) "ID")))
+                      (when id
+                        (list (org-get-heading t t t t) id))))
+                  nil 'file))))
     (if (null org-ids)
         (message "No headers with IDs found in current file")
-      (let* ((selection (helm-comp-read "Select header: "
-                                        (mapcar 'car org-ids))))
+      (let* ((selection (helm-comp-read "Select header: " (mapcar #'car org-ids))))
         (when selection
           (let* ((id (cadr (assoc selection org-ids)))
                  (description selection)
                  (link (format "[[id:%s][%s]]" id description)))
-            (insert link))))))))
+            (insert link)))))))
 
 ;; Thiết lập phím tắt
-(global-set-key (kbd "C-c l i") 'my/org-get-headers-with-ids)
-(map! :leader (:prefix "l" :desc "Insert ID in file" "i" #'my/org-get-headers-with-ids))
+(global-set-key (kbd "C-c l i") 'drringo/org-get-headers-with-ids)
 
 ;; ==============================================================
 ;; PHẦN 2: LIÊN KẾT HEADER TRONG THƯ MỤC
@@ -99,26 +102,26 @@
 ;; Load các package cần thiết
 (require 'org-id)
 
-(defun my/org-get-headers-with-ids-in-folder (directory)
+(defun drringo/org-get-headers-with-ids-in-folder (directory)
   "Search all org headers with IDs in DIRECTORY (no subfolders) and insert an Org-mode link with fuzzy search."
   (interactive "DSelect directory: ")
-  (let* ((org-files (my/org-get-org-files-in-directory directory))
-         (org-ids (my/org-collect-ids-from-files org-files)))
+  (let* ((org-files (drringo/org-get-org-files-in-directory directory))
+         (org-ids (drringo/org-collect-ids-from-files org-files)))
     (if (null org-ids)
         (message "No headers with IDs found in directory: %s" directory)
       (let* ((selection (helm-comp-read "Select header: "
-                                        (mapcar 'car org-ids))))
+                                        (mapcar #'car org-ids))))
         (when selection
           (let* ((id (cadr (assoc selection org-ids)))
                  (description selection)
                  (link (format "[[id:%s][%s]]" id description)))
             (insert link)))))))
 
-(defun my/org-get-org-files-in-directory (directory)
+(defun drringo/org-get-org-files-in-directory (directory)
   "Trả về danh sách các file .org trong DIRECTORY (không bao gồm thư mục con)."
   (directory-files directory t "\\.org$"))
 
-(defun my/org-collect-ids-from-files (files)
+(defun drringo/org-collect-ids-from-files (files)
   "Thu thập tất cả headers có ID từ danh sách FILES."
   (let (id-headers)
     (dolist (file files)
@@ -133,8 +136,7 @@
     (reverse id-headers)))
 
 ;; Thiết lập phím tắt
-(global-set-key (kbd "C-c l f") 'my/org-get-headers-with-ids-in-folder)
-(map! :leader (:prefix "l" :desc "Insert ID in folder" "f" #'my/org-get-headers-with-ids-in-folder))
+(global-set-key (kbd "C-c l f") 'drringo/org-get-headers-with-ids-in-folder)
 
 ;; ==============================================================
 ;; PHẦN 3: LIÊN KẾT ĐẾN HÌNH ẢNH/BẢNG CÓ TÊN
@@ -148,45 +150,45 @@
 ;; 3. Chọn và tạo link đến #+NAME đó
 ;; 4. Tùy chỉnh description của link (mặc định là CAPTION)
 
-(defun get-org-image-names-and-captions ()
-  "Lấy tất cả các #+NAME và #+CAPTION của hình ảnh/bảng trong tài liệu Org mode.
-   
-   Xử lý logic:
-   - Khi gặp #+NAME: tạo cặp mới với caption = nil
-   - Khi gặp #+CAPTION: cập nhật caption cho name gần nhất
-   - Nếu không có name trước đó: tạo entry với caption làm name
-   - Nếu name không có caption: sử dụng name làm caption"
-  (let (image-info name-caption-pairs)
+(defun drringo/get-org-image-names-and-captions ()
+  "Lấy tất cả các cặp (name . caption) hoặc (caption . caption) nếu không có name, xử lý mọi thứ tự xuất hiện."
+  (let (result current-name current-caption)
     (save-excursion
       (goto-char (point-min))
-      (while (re-search-forward "^#\\+\\(NAME\\|CAPTION\\): \\(.*\\)$" nil t)
-        (let ((type (match-string 1))
-              (value (match-string 2)))
-          (cond
-           ;; Xử lý #+NAME: tạo cặp mới
-           ((string-equal type "NAME")
-            (push (cons value nil) name-caption-pairs))
-           ;; Xử lý #+CAPTION: cập nhật caption cho name gần nhất
-           ((string-equal type "CAPTION")
-            (if name-caption-pairs
-                (setcdr (car name-caption-pairs) value)
-              ;; Nếu không có name trước đó, tạo entry với caption làm name
-              (push (cons value value) name-caption-pairs))))))
-      ;; Chuyển đổi name-caption-pairs thành image-info
-      (dolist (pair name-caption-pairs)
-        (let ((name (car pair))
-              (caption (cdr pair)))
-          (push (cons name (or caption name)) image-info))))
-    (reverse image-info)))
+      (while (not (eobp))
+        (cond
+         ((looking-at "^#\\+NAME: \\(.*\\)$")
+          (setq current-name (match-string 1))
+          (forward-line 1))
+         ((looking-at "^#\\+CAPTION: \\(.*\\)$")
+          (setq current-caption (match-string 1))
+          (forward-line 1))
+         ((looking-at "^#\\+")
+          ;; Gặp directive khác, bỏ qua
+          (forward-line 1))
+         (t
+          ;; Gặp dòng không phải directive, nếu có name/caption thì lưu lại
+          (when (or current-name current-caption)
+            (push (cons (or current-name current-caption)
+                        (or current-caption current-name)) result)
+            (setq current-name nil)
+            (setq current-caption nil))
+          (forward-line 1))))
+      ;; Nếu còn sót ở cuối file
+      (when (or current-name current-caption)
+        (push (cons (or current-name current-caption)
+                    (or current-caption current-name)) result)))
+    (reverse result)))
 
+;; Sửa lại hàm helm-insert-org-image-link-with-custom-caption để gọi hàm mới
 (defun helm-insert-org-image-link-with-custom-caption ()
   "Hiển thị danh sách hình ảnh/bảng qua caption hoặc name, 
    cho phép chỉnh sửa caption trước khi chèn liên kết."
   (interactive)
-  (let* ((image-info (get-org-image-names-and-captions)))
+  (let* ((image-info (drringo/get-org-image-names-and-captions)))
     (if (null image-info)
         (message "No named images or tables found in current document")
-      (let* ((captions (mapcar 'cdr image-info))
+      (let* ((captions (mapcar #'cdr image-info))
              (selected-caption (helm-comp-read "Chọn caption hoặc name: " captions))
              ;; Tìm tên hình ảnh tương ứng với caption đã chọn
              (selected-name (car (rassoc selected-caption image-info)))
@@ -198,7 +200,6 @@
 
 ;; Thiết lập phím tắt
 (global-set-key (kbd "C-c l c") 'helm-insert-org-image-link-with-custom-caption)
-(map! :leader (:prefix "l" :desc "Insert entity link" "c" #'helm-insert-org-image-link-with-custom-caption))
 
 ;; ==============================================================
 ;; KẾT THÚC LIÊN KẾT BẰNG ID

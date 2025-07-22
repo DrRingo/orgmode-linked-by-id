@@ -141,6 +141,7 @@ This project is distributed under the MIT license. See the [LICENSE](LICENSE) fi
 - **Repository**: https://github.com/drringo/orgmode-linked-by-id
 - **Issues**: https://github.com/drringo/orgmode-linked-by-id/issues
 - **Discussions**: https://github.com/drringo/orgmode-linked-by-id/discussions
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## 📚 Additional Documentation
 

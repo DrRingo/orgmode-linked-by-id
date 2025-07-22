@@ -141,6 +141,7 @@ Dự án này được phân phối dưới giấy phép MIT. Xem file [LICENSE]
 - **Repository**: https://github.com/drringo/orgmode-linked-by-id
 - **Issues**: https://github.com/drringo/orgmode-linked-by-id/issues
 - **Discussions**: https://github.com/drringo/orgmode-linked-by-id/discussions
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## 📚 Tài liệu thêm
 
